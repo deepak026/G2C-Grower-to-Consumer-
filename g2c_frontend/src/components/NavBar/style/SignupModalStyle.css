@@ -1,3 +1,7 @@
+.modal_s .modal-dialog {
+   max-width: 800px; /* or any other value */
+   width: 100%; /* This makes it responsive */
+}
 
 .modal_body_s{ 
 

@@ -13,7 +13,7 @@ function ImgCarousel() {
       <Carousel.Item className="c">
         <img
           className="d-block w-100"
-          src="../../../public/images/Home_page_carousel/img1.jpg"
+          src="/images/Home_page_carousel/img1.jpg"
           alt="First slide"
         />
         <Carousel.Caption>
@@ -24,7 +24,7 @@ function ImgCarousel() {
       <Carousel.Item className="c">
         <img
           className="d-block w-100"
-          src="../../../public/images/Home_page_carousel/img2.jpg"
+          src="/images/Home_page_carousel/img2.jpg"
           alt="Second slide"
         />
         <Carousel.Caption>
@@ -35,7 +35,7 @@ function ImgCarousel() {
       <Carousel.Item className="c">
         <img
           className="d-block w-100"
-          src="../../../public/images/Home_page_carousel/img3.jpg"
+          src="/images/Home_page_carousel/img3.jpg"
           alt="Third slide"
         />
         <Carousel.Caption>

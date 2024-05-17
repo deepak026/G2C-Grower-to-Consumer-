@@ -2,7 +2,9 @@
    max-width: 800px; /* or any other value */
    width: 100%; /* This makes it responsive */
 }
-
+.login_img{
+   height: 400px;
+}
 .modal_l{ 
    
    .login_form_data{

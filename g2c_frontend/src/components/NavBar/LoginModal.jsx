@@ -69,8 +69,8 @@ function LoginModal({ onClose }) {
             </Modal.Header>
             <Modal.Body className="modal_body_l">
                 <div className="row">
-                    <div className="col">
-                        <img src="images/login_img.jpg" alt="Some image" />
+                    <div className="col" >
+                        <img src="images/login_img.jpg" className='login_img' alt="Some image" />
                     </div>
                     <div className="col login_form_data">
                         <div>

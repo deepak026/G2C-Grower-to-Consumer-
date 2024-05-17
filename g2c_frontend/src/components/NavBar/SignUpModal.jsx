@@ -44,14 +44,14 @@ function SignUpModal({ onClose }) {
     }
   }
   return (
-    <Modal show={true} onHide={onClose}>
+    <Modal show={true} onHide={onClose} className="modal_s">
       <Modal.Header closeButton>
         <Modal.Title>SignUp</Modal.Title>
       </Modal.Header>
       <Modal.Body className="modal_body_s">
         <div className="row">
           <div className="col">
-            <img src="images/signup_img.jpg" alt="person image" />
+            <img src="images/signup_img.jpg" className="signup_img" alt="person image" />
           </div>
           <div className="col">
           <div>
