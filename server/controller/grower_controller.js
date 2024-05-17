@@ -212,37 +212,34 @@ function doDeleteProduct(req, resp){
   }).catch(err=>console.log(err));
 }
 
-function getGrowerInfo(req, resp){
-  var email = req.query.email;
-  // console.log(email);
-  growerProfile_Model.find({g_email:email})
-    .then((doc) => {
-      // console.log(doc[0]);
-      if(doc.length>0){
-        const profileName = "profile_" + doc[0].g_name + ".png";
-        const profileImgPath = path.join(__dirname, '..', 'uploads', 'profile', email, profileName);
-        const proofImgPath = path.join(__dirname, 'uploads', email, 'proof.jpg');
-        fs.readFile(profileImgPath, (err, data) => {
-          if(!err){
-            console.log("object");
+async function getGrowerInfo(req, resp) {
+  try {
+    const email = req.query.email;
+    const doc = await growerProfile_Model.find({ g_email: email });
 
-            const base64Image = data.toString('base64');
-            doc[0].g_profile_pic = base64Image;
-          }else{
-            doc[0].g_profile_pic = null;
-          }
-        })
-        resp.send(doc);
-      }else{
-        resp.send({msg:"Grower not found"});
+    if (doc.length > 0) {
+      const profileName = "profile_" + doc[0].g_name + ".png";
+      const profileImgPath = path.join(__dirname, '..', 'uploads', 'profile', email, profileName);
+
+      try {
+        const profileImageData = await fs.readFile(profileImgPath);
+        console.log(profileImageData);
+        const base64Image = profileImageData.toString('base64');
+        doc[0].g_profile_pic = base64Image;
+      } catch (err) {
+        console.error("Error reading profile image:", err);
+        doc[0].g_profile_pic = null;
       }
-      
-    })
-    .catch((error) => {
-      resp.send(error);
-    });
-}
 
+      resp.send(doc);
+    } else {
+      resp.send({ msg: "Grower not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching grower info:", error);
+    resp.status(500).send({ msg: "Internal server error" });
+  }
+}
 function doUpdateProduct(req, resp){
   resp.send("Saved")
 }
