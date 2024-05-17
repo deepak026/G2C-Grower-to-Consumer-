@@ -1,1 +1,1 @@
-$ G2C (Grower to Consumer)
+# G2C (Grower to Consumer)
