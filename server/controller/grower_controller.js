@@ -217,8 +217,26 @@ function getGrowerInfo(req, resp){
   // console.log(email);
   growerProfile_Model.find({g_email:email})
     .then((doc) => {
-      // console.log(doc);
-      resp.send(doc);
+      // console.log(doc[0]);
+      if(doc.length>0){
+        const profileName = "profile_" + doc[0].g_name + ".png";
+        const profileImgPath = path.join(__dirname, '..', 'uploads', 'profile', email, profileName);
+        const proofImgPath = path.join(__dirname, 'uploads', email, 'proof.jpg');
+        fs.readFile(profileImgPath, (err, data) => {
+          if(!err){
+            console.log("object");
+
+            const base64Image = data.toString('base64');
+            doc[0].g_profile_pic = base64Image;
+          }else{
+            doc[0].g_profile_pic = null;
+          }
+        })
+        resp.send(doc);
+      }else{
+        resp.send({msg:"Grower not found"});
+      }
+      
     })
     .catch((error) => {
       resp.send(error);
