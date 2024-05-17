@@ -1,0 +1,47 @@
+.modal_l .modal-dialog {
+   max-width: 800px; /* or any other value */
+   width: 100%; /* This makes it responsive */
+}
+
+.modal_l{ 
+   
+   .login_form_data{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+   }
+   input{
+   width: 300px;
+   margin: 10px auto;
+   padding:10px;
+   border:1px solid #ccc;
+   border-radius: 10px;
+   }
+   .err_msg{
+      color: red;
+      font-size: 15px;
+      margin-left: 10px;
+      margin-top: 2px;
+   }
+   .succ_msg{
+      color: green;
+      font-weight: 500;
+      font-size: 15px;
+      margin-left: 5px;
+      margin-top: 2px;
+   }
+   .login_btn{
+      background-color: #007bff;
+      color: #fff;
+      font-size: 20px;
+      height: 50px;
+      width: 100px;
+      border-radius: 12px;
+   }
+   .login_btn:hover{
+      background-color: #0056b3;
+   }
+}
+
+

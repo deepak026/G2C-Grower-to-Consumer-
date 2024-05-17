@@ -1,0 +1,9 @@
+.navbar .btn{
+   margin: 5px;
+   color: #fff;
+   background-color: #007bff;
+}
+.navbar .btn:hover{
+   color: #fff;
+   background-color: #0056b3;
+}
