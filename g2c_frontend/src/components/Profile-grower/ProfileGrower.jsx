@@ -4,24 +4,10 @@ import axios from "axios";
 import { useParams } from "react-router";
 
 function ProfileGrower() {
-  const {email} = useParams();
+  const { email } = useParams();
 
-  async function getGrowerInfo(){
-    const url = `http://localhost:2000/grower/growerInfo?email=${email}`;
-    const response = await axios.get(url);
-    if (response.data) {
-      // alert(JSON.stringify(response.data[0]));
-      setGrowerProfileObj(response.data[0]);
-
-    } else {
-      alert("Error: " + response.data.msg);
-    }
-  }
-  useEffect(()=>{
-    getGrowerInfo();
-  }, [email]);
   const [growerProfileObj, setGrowerProfileObj] = useState({
-    g_email: email,
+    g_email: email || "",
     g_name: "",
     g_contact: "",
     g_address: "",
@@ -32,6 +18,7 @@ function ProfileGrower() {
     g_profile_pic: null,
     g_proof_pic: null,
   });
+
   const [profileImgSrc, setProfileImgSrc] = useState(
     "https://via.placeholder.com/200"
   );
@@ -39,40 +26,64 @@ function ProfileGrower() {
     "https://via.placeholder.com/200"
   );
 
-  function updatePic(event) {
+  useEffect(() => {
+    const getGrowerInfo = async () => {
+      try {
+        const url = `http://localhost:2000/grower/growerInfo?email=${email}`;
+        const response = await axios.get(url);
+        if (response.data && response.data[0]) {
+          setGrowerProfileObj(response.data[0]);
+        } else {
+          alert("Error: " + (response.data?.msg || "No data received"));
+        }
+      } catch (error) {
+        console.error("Error fetching grower info:", error);
+        alert("Failed to fetch grower info.");
+      }
+    };
+
+    if (email) {
+      getGrowerInfo();
+    }
+  }, [email]);
+
+  const updatePic = (event) => {
     const { name, files } = event.target;
     if (files && files[0]) {
       setGrowerProfileObj({ ...growerProfileObj, [name]: files[0] });
       const newImgSrc = URL.createObjectURL(files[0]);
-      name === "g_profile_pic"
-        ? setProfileImgSrc(newImgSrc)
-        : setProofImgSrc(newImgSrc);
+      name === "g_profile_pic" ? setProfileImgSrc(newImgSrc) : setProofImgSrc(newImgSrc);
     }
-  }
+  };
 
-  function doUpdateVal(event) {
+  const doUpdateVal = (event) => {
     const { name, value } = event.target;
     setGrowerProfileObj({ ...growerProfileObj, [name]: value });
-  }
+  };
 
-  async function handleProfileSubmit(event) {
+  const handleProfileSubmit = async (event) => {
     event.preventDefault();
     if (!growerProfileObj.g_profile_pic || !growerProfileObj.g_proof_pic) {
       alert("Please upload both profile and proof pictures.");
       return;
     }
-    console.log(growerProfileObj);
-    let fd = new FormData();
-    for (let prop in growerProfileObj) {
-      fd.append(prop, growerProfileObj[prop]);
-    }
-    const url = "http://localhost:2000/grower/updateGrowerProfile";
 
-    const reslObj = await axios.post(url, fd, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-    alert(JSON.stringify(reslObj.data));
-  }
+    try {
+      let fd = new FormData();
+      for (let prop in growerProfileObj) {
+        fd.append(prop, growerProfileObj[prop]);
+      }
+
+      const url = "http://localhost:2000/grower/updateGrowerProfile";
+      const reslObj = await axios.post(url, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      alert(JSON.stringify(reslObj.data));
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile.");
+    }
+  };
 
   return (
     <div className="profile-page">
@@ -107,19 +118,11 @@ function ProfileGrower() {
           </div>
 
           <div className="info-section">
-            {/* <input
-              type="text"
-              name="g_email"
-              placeholder="Email"
-              value={growerProfileObj.g_email}
-              required
-              onChange={doUpdateVal}
-            /> */}
             <input
               type="text"
               name="g_name"
               placeholder="Name"
-              value={growerProfileObj.g_name}
+              value={growerProfileObj.g_name || ""}
               required
               onChange={doUpdateVal}
             />
@@ -127,7 +130,7 @@ function ProfileGrower() {
               type="text"
               name="g_contact"
               placeholder="Contact No."
-              value={growerProfileObj.g_contact}
+              value={growerProfileObj.g_contact || ""}
               required
               onChange={doUpdateVal}
             />
@@ -135,7 +138,7 @@ function ProfileGrower() {
               type="text"
               name="g_address"
               placeholder="Address"
-              value={growerProfileObj.g_address}
+              value={growerProfileObj.g_address || ""}
               required
               onChange={doUpdateVal}
             />
@@ -143,7 +146,7 @@ function ProfileGrower() {
               type="text"
               name="g_city"
               placeholder="City/Village"
-              value={growerProfileObj.g_city}
+              value={growerProfileObj.g_city || ""}
               required
               onChange={doUpdateVal}
             />
@@ -151,7 +154,7 @@ function ProfileGrower() {
               type="text"
               name="g_state"
               placeholder="State"
-              value={growerProfileObj.g_state}
+              value={growerProfileObj.g_state || ""}
               required
               onChange={doUpdateVal}
             />
@@ -159,14 +162,14 @@ function ProfileGrower() {
               type="text"
               name="g_aadhar"
               placeholder="Aadhar Card No."
-              value={growerProfileObj.g_aadhar}
+              value={growerProfileObj.g_aadhar || ""}
               required
               onChange={doUpdateVal}
             />
             <textarea
               name="g_otherInfo"
               placeholder="Other Information"
-              value={growerProfileObj.g_otherInfo}
+              value={growerProfileObj.g_otherInfo || ""}
               required
               onChange={doUpdateVal}
               rows="3"
