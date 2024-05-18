@@ -73,12 +73,12 @@ function DashboardGrower() {
             <br />
             <br />
             <br />
-            <Card style={{ width: '100%', height: '100%' }}>
+            {/* <Card style={{ width: '100%', height: '100%' }}>
                         <Card.Body>
                             <Card.Title>Check Token</Card.Title>
                             <Button variant="primary" onClick={handleToken}>Verify token</Button>
                         </Card.Body>
-                    </Card>
+                    </Card> */}
         </div>
     );
 }
