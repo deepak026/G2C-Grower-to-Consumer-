@@ -54,7 +54,7 @@ function List_products() {
   // };
   const categories = {
     Select: [],
-    Fruits: ["Apples", "Oranges", "Bananas", "Grapes"],
+    Fruits: ["Apples", "Oranges", "Bananas", "Grapes", "watermelon"],
     Vegetables: ["Carrots", "Broccoli", "Lettuce", "Spinach"],
     Grains: ["Rice", "Wheat", "Oats", "Barley"],
     Drinks: ["Water", "Juice", "Soda", "Milk"],
