@@ -7,32 +7,9 @@ function List_products() {
   const [productImgSrc, setProductImgSrc] = useState(
     "https://via.placeholder.com/200"
   );
-  const {email:g_email} = useParams();
+  const { email: g_email } = useParams();
   let [g_name, setg_name] = useState("");
   let [g_city, setg_city] = useState("");
-  
-  async function getGrowerInfo(){
-    const url = `http://localhost:2000/grower/growerInfo?email=${g_email}`;
-    const response = await axios.get(url);
-    if (response.data) {
-      // alert(JSON.stringify(response.data[0].g_city));
-      setg_name(response.data[0].g_name);
-      setg_city(response.data[0].g_city);
-
-    } else {
-      alert("Error: " + response.data.msg);
-    }
-  }
-  useEffect(()=>{
-    getGrowerInfo();
-  }, [g_email]);
-  useEffect(() => {
-    // Update productDetails whenever g_city changes
-    setProductDetails((prevDetails) => ({
-      ...prevDetails,
-      city: g_city,
-    }));
-  }, [g_city]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [products, setProducts] = useState([]);
 
@@ -47,6 +24,28 @@ function List_products() {
     product_pic: null,
   });
 
+  async function getGrowerInfo() {
+    const url = `http://localhost:2000/grower/growerInfo?email=${g_email}`;
+    const response = await axios.get(url);
+    if (response.data) {
+      // alert(JSON.stringify(response.data[0].g_city));
+      setg_name(response.data[0].g_name);
+      setg_city(response.data[0].g_city);
+    } else {
+      alert("Error: " + response.data.msg);
+    }
+  }
+  useEffect(() => {
+    getGrowerInfo();
+  }, [g_email]);
+  useEffect(() => {
+    // Update productDetails whenever g_city changes
+    setProductDetails((prevDetails) => ({
+      ...prevDetails,
+      city: g_city,
+    }));
+  }, [g_city]);
+
   // const categories = {
   //   Select: [],
   //   Electronics: ["Laptop", "Smartphone", "Headphones", "Camera"],
@@ -55,11 +54,11 @@ function List_products() {
   // };
   const categories = {
     Select: [],
-    Fruits: ["Apples", "Oranges", "Bananas", "Grapes"],
+    Fruits: ["Apples", "Oranges", "Bananas", "Grapes", "watermelon"],
     Vegetables: ["Carrots", "Broccoli", "Lettuce", "Spinach"],
     Grains: ["Rice", "Wheat", "Oats", "Barley"],
-    Drinks: ["Water", "Juice", "Soda", "Milk"]
-};
+    Drinks: ["Water", "Juice", "Soda", "Milk"],
+  };
 
   const units = ["kg", "piece", "gm", "ltr"];
 
@@ -111,9 +110,24 @@ function List_products() {
       headers: { "Content-Type": "multipart/form-data" },
     });
     alert(JSON.stringify(response.data.msg));
+
+    //reset prodyuct details and image source
+    setProductDetails({
+      email: g_email,
+      city: g_city,
+      category: "",
+      product: "",
+      price: "",
+      unit: "",
+      description: "",
+      product_pic: null,
+    });
+    setProductImgSrc("https://via.placeholder.com/200");
+    setSelectedCategory(""); // Reset category to Select
+    setProducts([]); // Reset products list
   }
 
-  function handleTemp(){
+  function handleTemp() {
     alert(g_city);
   }
 
@@ -137,8 +151,9 @@ function List_products() {
               />
             </Form.Group> */}
             <Form.Group as={Col} controlId="formBasicEmail">
-              <Form.Label><h2>Enter Product Info</h2></Form.Label>
-              
+              <Form.Label>
+                <h2>Enter Product Info</h2>
+              </Form.Label>
             </Form.Group>
             <Form.Group as={Col} md="5" controlId="formFileSm" className="mb-3">
               <Image
@@ -146,7 +161,7 @@ function List_products() {
                 alt="Product"
                 thumbnail
                 className="product_img custom_size"
-                style={{ width: '200px', height: '200px', borderRadius:"50%" }}
+                style={{ width: "200px", height: "200px", borderRadius: "50%" }}
               />
               <Form.Control
                 type="file"
@@ -163,6 +178,7 @@ function List_products() {
               <Form.Control
                 as="select"
                 name="category"
+                value={productDetails.category}
                 onChange={(e) => {
                   setSelectedCategory(e.target.value);
                   doUpdateVal(e);
@@ -177,7 +193,7 @@ function List_products() {
             </Form.Group>
             <Form.Group as={Col}>
               <Form.Label>Product</Form.Label>
-              <Form.Control as="select" name="product" onChange={doUpdateVal}>
+              <Form.Control as="select" name="product" value={productDetails.product} onChange={doUpdateVal}>
                 <option value="">Select</option>
                 {products.map((product, index) => (
                   <option key={index} value={product}>
@@ -190,11 +206,11 @@ function List_products() {
           <Row className="mb-3">
             <Form.Group as={Col}>
               <Form.Label>Price</Form.Label>
-              <Form.Control type="text" name="price" onChange={doUpdateVal} />
+              <Form.Control type="text" value={productDetails.price} name="price" onChange={doUpdateVal} />
             </Form.Group>
             <Form.Group as={Col}>
               <Form.Label>Per</Form.Label>
-              <Form.Control as="select" name="unit" onChange={doUpdateVal}>
+              <Form.Control as="select" value={productDetails.unit} name="unit" onChange={doUpdateVal}>
                 <option value="select">Select</option>
                 {units.map((unit, index) => (
                   <option key={index} value={unit}>
@@ -210,7 +226,7 @@ function List_products() {
               <Form.Control
                 as="textarea"
                 rows={3}
-                name="description"
+                name="description"q
                 value={productDetails.description}
                 onChange={doUpdateVal}
               />

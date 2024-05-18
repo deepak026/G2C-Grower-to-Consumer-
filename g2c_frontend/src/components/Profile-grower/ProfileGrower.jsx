@@ -5,11 +5,13 @@ import { useParams } from "react-router";
 
 function ProfileGrower() {
   const {email} = useParams();
+
   async function getGrowerInfo(){
     const url = `http://localhost:2000/grower/growerInfo?email=${email}`;
     const response = await axios.get(url);
     if (response.data) {
-      alert(JSON.stringify(response.data));
+      // alert(JSON.stringify(response.data[0]));
+      setGrowerProfileObj(response.data[0]);
 
     } else {
       alert("Error: " + response.data.msg);

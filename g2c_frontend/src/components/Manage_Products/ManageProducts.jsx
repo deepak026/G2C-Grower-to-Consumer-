@@ -85,13 +85,18 @@ function ManageProducts() {
   //delete product
   async function handleDelete(productId) {
     // alert(productId)
-    const url = `http://localhost:2000/grower/deleteProduct?email=${email}&productId=${productId}`;
-    const response = await axios.get(url);
-    if (response.data.status) {
-      alert("Product deleted successfully");
-      getAllProducts(); // Refresh the list after deletion
-    } else {
-      alert("Error: " + response.data.msg);
+    let confirmDel = confirm("Confirm? The product will be deleted");
+    if(confirmDel){
+      const url = `http://localhost:2000/grower/deleteProduct?email=${email}&productId=${productId}`;
+      const response = await axios.get(url);
+      if (response.data.status) {
+        alert("Product deleted successfully");
+        getAllProducts(); // Refresh the list after deletion
+      } else {
+        alert("Error: " + response.data.msg);
+      }
+    }else{
+      return;
     }
   }
 

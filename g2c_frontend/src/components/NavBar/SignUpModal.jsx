@@ -40,7 +40,11 @@ function SignUpModal({ onClose }) {
       let reslObj = await axios.post(url, fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      alert(JSON.stringify(reslObj.data));
+      if(reslObj.data.status == false){
+        alert("User already exists");
+      }else{
+        alert("SignUp Successfull");
+      }
     }
   }
   return (
