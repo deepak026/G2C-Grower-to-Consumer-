@@ -226,7 +226,7 @@ function List_products() {
               <Form.Control
                 as="textarea"
                 rows={3}
-                name="description"
+                name="description"q
                 value={productDetails.description}
                 onChange={doUpdateVal}
               />
