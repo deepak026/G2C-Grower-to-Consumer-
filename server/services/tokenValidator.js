@@ -2,19 +2,20 @@ var jwt= require("jsonwebtoken");
 
 function doTokenValidation1(req, resp, next) {
    // resp.set("json");
-  console.log("*********************");
+  // console.log("*********************");
   const full_token = req.headers["authorization"]; //keyword
 //   console.log(full_token);
   var ary = full_token.split(" ");
   let actualToken = ary[1];
-   console.log("--------------------------");
+  //  console.log("--------------------------");
   var isTokenValid;
   try {
     isTokenValid = jwt.verify(actualToken, process.env.SEC_KEY);
    // console.log(isTokenValid);
     const obj = jwt.decode(ary[1]);
-    console.log(obj);
-    console.log("--------------------------");
+    // console.log(obj);
+    console.log("Authorization successfull");
+    // console.log("--------------------------");
     next();
     // resp.json({ status: true, message: "**Aauthorized", item: obj });
   } catch (err) {

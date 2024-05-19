@@ -11,7 +11,7 @@ function createNewDir(dirPath) {
     if (err) {
       console.log("Error creating directory:", err);
     } else {
-      console.log("Directory ensured");
+      // console.log("Directory ensured");
     }
   });
 }
@@ -107,7 +107,7 @@ function doListNewProducts(req, resp) {
   // resp.send({msg:"hello"});
   const { email, city } = req.body;
 
-  console.log(req.body);
+  // console.log(req.body);
   const productDirPath = path.join(
     __dirname,
     "..",

@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import {doFetchListedProducts} from "../../services/users-controller";
+
 function ManageProducts() {
   const { email } = useParams(); // Access the email parameter from the URL
   const [productsData, setProductsData] = useState([]); // State to store the products data fetched from server
