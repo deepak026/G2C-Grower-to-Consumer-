@@ -14,13 +14,7 @@ const listNewProduct_Model = require("./models/modelListNewProduct");
 
 const app = express();
 
-app.use(cors(
-  {
-    origin:["https://g2c-backend.vercel.app"],
-    methods:["POST", "GET"],
-    credentials: true
-  }
-));
+app.use(cors());
 app.use(fileuploader());
 app.use(express.urlencoded({extended: true}));
 
