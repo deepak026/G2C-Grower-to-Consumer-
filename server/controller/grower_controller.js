@@ -218,18 +218,18 @@ async function getGrowerInfo(req, resp) {
     const doc = await growerProfile_Model.find({ g_email: email });
 
     if (doc.length > 0) {
-      const profileName = "profile_" + doc[0].g_name + ".png";
-      const profileImgPath = path.join(__dirname, '..', 'uploads', 'profile', email, profileName);
+    //   const profileName = "profile_" + doc[0].g_name + ".png";
+    //   const profileImgPath = path.join(__dirname, '..', 'uploads', 'profile', email, profileName);
 
-      try {
-        const profileImageData = await fs.readFile(profileImgPath);
-        console.log(profileImageData);
-        const base64Image = profileImageData.toString('base64');
-        doc[0].g_profile_pic = base64Image;
-      } catch (err) {
-        console.error("Error reading profile image:", err);
-        doc[0].g_profile_pic = null;
-      }
+    //   try {
+    //     const profileImageData = await fs.readFile(profileImgPath);
+    //     console.log(profileImageData);
+    //     const base64Image = profileImageData.toString('base64');
+    //     doc[0].g_profile_pic = base64Image;
+    //   } catch (err) {
+    //     console.error("Error reading profile image:", err);
+    //     doc[0].g_profile_pic = null;
+    //   }
 
       resp.send(doc);
     } else {
