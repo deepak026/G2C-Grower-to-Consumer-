@@ -240,10 +240,35 @@ async function getGrowerInfo(req, resp) {
     resp.status(500).send({ msg: "Internal server error" });
   }
 }
-function doUpdateProduct(req, resp){
-  resp.send("Saved")
-}
+async function doUpdateProduct(req, resp) {
+  const { email, productId, productData } = req.body;
+  console.log(productData);
 
+  try {
+    const result = await listNewProduct_Model.findOneAndUpdate(
+      { email: email, "products._id": productId },
+      {
+        $set: {
+          "products.$.category": productData.category,
+          "products.$.product": productData.product,
+          "products.$.price": productData.price,
+          "products.$.unit": productData.unit,
+          "products.$.description": productData.description,
+          "products.$.product_pic": productData.product_pic,
+        }
+      },
+      { new: true }
+    );
+
+    if (!result) {
+      return resp.json({ status: false, message: 'Product not found' });
+    }
+
+    resp.json({ status: true, message: 'Product updated successfully', data: result });
+  } catch (error) {
+    resp.json({ status: false, message: 'Server error', error: error.toString() });
+  }
+}
 
 module.exports = {
   doUpdateGrowerProfile,

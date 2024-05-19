@@ -7,6 +7,8 @@ const route_user = require("./routes/route_user");
 const route_grower = require("./routes/route_grower");
 const route_consumer = require("./routes/route_consumer");
 const cors = require("cors");
+const bodyParser = require('body-parser');
+
 const SignupData_Model = require("./models/modelSignUpData");
 const growerProfile_Model = require("./models/modelGrowerProfile");
 const listNewProduct_Model = require("./models/modelListNewProduct");
@@ -17,6 +19,9 @@ const app = express();
 app.use(cors());
 app.use(fileuploader());
 app.use(express.urlencoded({extended: true}));
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
 
 dotenv.config(); //key value pair in .env file will be added in process.env object 
 

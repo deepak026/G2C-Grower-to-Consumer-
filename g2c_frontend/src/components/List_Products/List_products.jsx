@@ -235,9 +235,9 @@ function List_products() {
           <Button variant="primary" onClick={handleProfileSubmit}>
             List Now
           </Button>
-          <Button variant="primary" onClick={handleTemp}>
+          {/* <Button variant="primary" onClick={handleTemp}>
             check
-          </Button>
+          </Button> */}
         </Form>
       </div>
     </Container>

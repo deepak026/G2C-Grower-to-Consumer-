@@ -61,14 +61,15 @@ function ManageProducts() {
       productId: productId,
       productData: product,
     };
+    console.log(newData);
     const url = `http://localhost:2000/grower/updateProduct`;
     let reslobj = await axios.post(url, newData, {
       headers: {
         "Content-Type": "application/json",
       },
     });
-
-    if (reslobj) {
+    // alert(JSON.stringify(reslobj));
+    if (reslobj.data.status) {
       alert("Product updated successfully");
       setEditProduct(false);
       getAllProducts();
