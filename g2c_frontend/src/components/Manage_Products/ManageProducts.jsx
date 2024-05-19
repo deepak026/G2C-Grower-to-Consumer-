@@ -9,14 +9,14 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import {doFetchListedProducts} from "../../services/users-controller";
+import { doFetchListedProducts } from "../../services/users-controller";
 
 function ManageProducts() {
   const { email } = useParams(); // Access the email parameter from the URL
   const [productsData, setProductsData] = useState([]); // State to store the products data fetched from server
   const [isLoading, setIsLoading] = useState(true); // State for showing/hiding loading spinner
   const [error, setError] = useState(null); // State for storing any error from the fetch process
-  const [editProduct, setEditProduct] = useState(null);
+  const [editProduct, setEditProduct] = useState({});
 
   // Function to get all products from the server
   async function getAllProducts() {
@@ -24,11 +24,11 @@ function ManageProducts() {
     // const response = await axios.get(url);
     //api call with token validation
     const response = await doFetchListedProducts(email);
-    if(response.data.status == false){
+    if (response.data.status == false) {
       alert(JSON.stringify(response.data.message));
       return;
     }
-    
+
     // alert(JSON.stringify(response.data));
     setProductsData(response.data[0].products); // Assuming the server responds with the array of products
     setIsLoading(false); // Update loading state
@@ -46,8 +46,12 @@ function ManageProducts() {
 
   //edit product
   function handleEdit(productId) {
-    // alert(productId);
-    setEditProduct(true);
+    setEditProduct((obj) => {
+      return {
+        ...obj,
+        [productId]: true,
+      };
+    });
   }
 
   //save edits
@@ -71,24 +75,40 @@ function ManageProducts() {
     // alert(JSON.stringify(reslobj));
     if (reslobj.data.status) {
       alert("Product updated successfully");
-      setEditProduct(false);
+      //reset edit on this product
+      setEditProduct((obj) => {
+        return {
+          ...obj,
+          [productId]: false,
+        };
+      });
       getAllProducts();
     }
     // alert(JSON.stringify(reslobj))
     // alert("Product updated successfully");
-    setEditProduct(false);
+    setEditProduct((obj) => {
+      return {
+        ...obj,
+        [productId]: false,
+      };
+    });
   }
 
   //cancel edit
-  function handleCancel() {
-    setEditProduct(false);
+  function handleCancel(productId) {
+    setEditProduct((obj) => {
+      return {
+        ...obj,
+        [productId]: false,
+      };
+    });
   }
 
   //delete product
   async function handleDelete(productId) {
     // alert(productId)
     let confirmDel = confirm("Confirm? The product will be deleted");
-    if(confirmDel){
+    if (confirmDel) {
       const url = `http://localhost:2000/grower/deleteProduct?email=${email}&productId=${productId}`;
       const response = await axios.get(url);
       if (response.data.status) {
@@ -97,7 +117,7 @@ function ManageProducts() {
       } else {
         alert("Error: " + response.data.msg);
       }
-    }else{
+    } else {
       return;
     }
   }
@@ -144,7 +164,7 @@ function ManageProducts() {
                 <tr key={product.id}>
                   <td>{index + 1}</td>
                   <td>
-                    {editProduct ? (
+                    {editProduct[product._id] ? (
                       <Form.Control
                         type="text"
                         name="product"
@@ -156,7 +176,7 @@ function ManageProducts() {
                     )}
                   </td>
                   <td>
-                    {editProduct ? (
+                    {editProduct[product._id] ? (
                       <Form.Control
                         type="text"
                         name="price"
@@ -168,7 +188,7 @@ function ManageProducts() {
                     )}
                   </td>
                   <td>
-                    {editProduct ? (
+                    {editProduct[product._id] ? (
                       <Form.Control
                         type="text"
                         name="unit"
@@ -188,7 +208,7 @@ function ManageProducts() {
                     </Button>
                   </td>
                   <td>
-                    {editProduct ? (
+                    {editProduct[product._id] ? (
                       <>
                         <Button
                           variant="success"
@@ -196,7 +216,10 @@ function ManageProducts() {
                         >
                           Save
                         </Button>
-                        <Button variant="secondary" onClick={handleCancel}>
+                        <Button
+                          variant="secondary"
+                          onClick={() => handleCancel(product._id)}
+                        >
                           Cancel
                         </Button>
                       </>
