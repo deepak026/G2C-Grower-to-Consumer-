@@ -31,8 +31,8 @@ app.listen(2000, ()=>{
 
 //database connectivity
 const mongoCon = mongoose
-  // .connect("mongodb://localhost:27017/proj2024")
-  .connect("mongodb+srv://new_user:password123*@g2c-database.4olfdju.mongodb.net/proj2024")
+  .connect("mongodb://localhost:27017/proj2024")
+  // .connect("mongodb+srv://new_user:password123*@g2c-database.4olfdju.mongodb.net/proj2024")
   .then(() => {
     console.log("Database connected");
   })

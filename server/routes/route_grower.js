@@ -2,7 +2,6 @@ const express = require("express");
 
 const {
   doUpdateGrowerProfile,
-  doFetchGrowerProfile,
   doListNewProducts,
   doFetchProducts,
   doDeleteProduct,
@@ -13,7 +12,6 @@ const {doTokenValidation1} = require("../services/tokenValidator");
 const app = express.Router();
 
 app.post("/updateGrowerProfile", doUpdateGrowerProfile);
-app.post("/fetchGrowerProfile", doFetchGrowerProfile);
 app.post("/listNewProducts", doListNewProducts);
 app.get("/fetchProducts", doTokenValidation1,doFetchProducts);
 app.get("/deleteProduct", doDeleteProduct);

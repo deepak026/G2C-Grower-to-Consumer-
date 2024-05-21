@@ -27,10 +27,10 @@ function List_products() {
   async function getGrowerInfo() {
     const url = `http://localhost:2000/grower/growerInfo?email=${g_email}`;
     const response = await axios.get(url);
-    if (response.data) {
-      // alert(JSON.stringify(response.data[0].g_city));
-      setg_name(response.data[0].g_name);
-      setg_city(response.data[0].g_city);
+    if (response.data.status) {
+      // alert(JSON.stringify(response.data.doc));
+      setg_name(response.data.doc.g_name);
+      setg_city(response.data.doc.g_city);
     } else {
       alert("Error: " + response.data.msg);
     }
@@ -235,9 +235,9 @@ function List_products() {
           <Button variant="primary" onClick={handleProfileSubmit}>
             List Now
           </Button>
-          {/* <Button variant="primary" onClick={handleTemp}>
+          <Button variant="primary" onClick={handleTemp}>
             check
-          </Button> */}
+          </Button>
         </Form>
       </div>
     </Container>

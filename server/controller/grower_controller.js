@@ -1,5 +1,5 @@
 const path = require("path");
-const fs = require("fs");
+const fs = require("fs").promises;
 
 const growerProfile_Model = require("../models/modelGrowerProfile");
 const listNewProduct_Model = require("../models/modelListNewProduct");
@@ -89,19 +89,6 @@ function doUpdateGrowerProfile(req, resp) {
   //     });
 }
 
-function doFetchGrowerProfile(req, resp) {
-  resp.set("json");
-
-  growerProfile_Model
-    .find(req.body)
-    .then((doc) => {
-      resp.json({ status: true, msg: "Record Found", doc: doc });
-    })
-    .catch((error) => {
-      resp.json({ status: false, msg: error.toString() });
-    });
-}
-
 function doListNewProducts(req, resp) {
   // resp.set("json");
   // resp.send({msg:"hello"});
@@ -140,50 +127,56 @@ function doListNewProducts(req, resp) {
     price: req.body.price,
     unit: req.body.unit,
     description: req.body.description,
-    product_pic: req.body.product_pic
+    product_pic: req.body.product_pic,
   };
-  listNewProduct_Model.findOne({email:email, city:city})
-  .then((existingGrower)=>{
-    if(existingGrower){
-      const isNewProductListed = existingGrower.products.some(product=>{
-        return (
-          product.category === newProduct.category &&
-          product.product === newProduct.product
-        );
-      });
-
-      if(isNewProductListed){
-        resp.json({status:false, msg:"Product already Listed"});
-      }else{
-        existingGrower.products.push(newProduct);
-        existingGrower.save()
-        .then(()=>{
-          resp.json({status:true, msg:"Product Listed"});
-        })
-        .catch(()=>{
-          resp.json({status:false, msg:"Product Not Listed"});
+  listNewProduct_Model
+    .findOne({ email: email, city: city })
+    .then((existingGrower) => {
+      if (existingGrower) {
+        const isNewProductListed = existingGrower.products.some((product) => {
+          return (
+            product.category === newProduct.category &&
+            product.product === newProduct.product
+          );
         });
+
+        if (isNewProductListed) {
+          resp.json({ status: false, msg: "Product already Listed" });
+        } else {
+          existingGrower.products.push(newProduct);
+          existingGrower
+            .save()
+            .then(() => {
+              resp.json({ status: true, msg: "Product Listed" });
+            })
+            .catch(() => {
+              resp.json({ status: false, msg: "Product Not Listed" });
+            });
+        }
+      } else {
+        const newGrower = {
+          email,
+          city,
+          products: [newProduct],
+        };
+        listNewProduct_Model
+          .create(newGrower)
+          .then((doc) => resp.json({ status: true, msg: "Product Listed" }))
+          .catch((error) =>
+            resp.json({ status: false, msg: error.toString() })
+          );
       }
-    }
-    else{
-      const newGrower = {
-        email, city,
-        products:[newProduct]
-      };
-      listNewProduct_Model.create(newGrower)
-      .then(doc=>resp.json({status:true, msg:"Product Listed"}))
-      .catch(error=>resp.json({status:false, msg:error.toString()}));
-    }
-  })
-  .catch((error)=>{
-    resp.json({status:false, msg:error.toString()});
-  })
+    })
+    .catch((error) => {
+      resp.json({ status: false, msg: error.toString() });
+    });
 }
 
-function doFetchProducts(req, resp){
+function doFetchProducts(req, resp) {
   var email = req.query.email;
   // console.log(email);
-  listNewProduct_Model.find({email:email})
+  listNewProduct_Model
+    .find({ email: email })
     .then((doc) => {
       // console.log(doc);
       resp.send(doc);
@@ -193,53 +186,73 @@ function doFetchProducts(req, resp){
     });
 }
 
-function doDeleteProduct(req, resp){
+function doDeleteProduct(req, resp) {
   resp.set("json");
-  let {email, productId} = req.query;
+  let { email, productId } = req.query;
   // console.log(email);
   // console.log(productId);
-  listNewProduct_Model.findOneAndUpdate(
-    {email:email},
-    {$pull:{products:{_id:productId}}},
-    {new:true}
-  )
-  .then(doc=>{
-    if(!doc){
-      return resp.json({status:false,msg:"No record found"});
-    }else{
-      return resp.json({status:true,data:doc.products});
-    }
-  }).catch(err=>console.log(err));
+  listNewProduct_Model
+    .findOneAndUpdate(
+      { email: email },
+      { $pull: { products: { _id: productId } } },
+      { new: true }
+    )
+    .then((doc) => {
+      if (!doc) {
+        return resp.json({ status: false, msg: "No record found" });
+      } else {
+        return resp.json({ status: true, data: doc.products });
+      }
+    })
+    .catch((err) => console.log(err));
 }
 
 async function getGrowerInfo(req, resp) {
+  const email = req.query.email;
+
   try {
-    const email = req.query.email;
     const doc = await growerProfile_Model.find({ g_email: email });
-
     if (doc.length > 0) {
-    //   const profileName = "profile_" + doc[0].g_name + ".png";
-    //   const profileImgPath = path.join(__dirname, '..', 'uploads', 'profile', email, profileName);
+      const profileName = `profile_${doc[0].g_name}.png`;
+      const profileImgPath = path.join(__dirname, '..', 'uploads', 'profile', email, profileName);
+      const proofName = `proof_${doc[0].g_name}.png`;
+      const proofImgPath = path.join(__dirname, '..', 'uploads', 'profile', email, proofName);
 
-    //   try {
-    //     const profileImageData = await fs.readFile(profileImgPath);
-    //     console.log(profileImageData);
-    //     const base64Image = profileImageData.toString('base64');
-    //     doc[0].g_profile_pic = base64Image;
-    //   } catch (err) {
-    //     console.error("Error reading profile image:", err);
-    //     doc[0].g_profile_pic = null;
-    //   }
+      let profileImageData, proofImageData;
 
-      resp.send(doc);
+      try {
+        profileImageData = await fs.readFile(profileImgPath);
+      } catch (err) {
+        console.error("Error reading profile image:", err);
+        profileImageData = null;
+      }
+
+      try {
+        proofImageData = await fs.readFile(proofImgPath);
+      } catch (err) {
+        console.error("Error reading proof image:", err);
+        proofImageData = null;
+      }
+
+      const g_profile = profileImageData ? `data:image/png;base64,${profileImageData.toString('base64')}` : null;
+      const g_proof = proofImageData ? `data:image/png;base64,${proofImageData.toString('base64')}` : null;
+
+      const growerData = {
+        ...doc[0]._doc, // Spread other grower information
+        g_profile: g_profile, // Add profile image as a separate variable
+        g_proof: g_proof, // Add proof image as a separate variable
+      };
+
+      resp.json({ status: true, doc: growerData });
     } else {
-      resp.send({ msg: "Grower not found" });
+      resp.json({ status: false, msg: "Grower not found" });
     }
   } catch (error) {
     console.error("Error fetching grower info:", error);
-    resp.status(500).send({ msg: "Internal server error" });
+    resp.json({ status: false, msg: "Internal server error", error: error.toString() });
   }
 }
+
 async function doUpdateProduct(req, resp) {
   const { email, productId, productData } = req.body;
   console.log(productData);
@@ -255,24 +268,31 @@ async function doUpdateProduct(req, resp) {
           "products.$.unit": productData.unit,
           "products.$.description": productData.description,
           "products.$.product_pic": productData.product_pic,
-        }
+        },
       },
       { new: true }
     );
 
     if (!result) {
-      return resp.json({ status: false, message: 'Product not found' });
+      return resp.json({ status: false, message: "Product not found" });
     }
 
-    resp.json({ status: true, message: 'Product updated successfully', data: result });
+    resp.json({
+      status: true,
+      message: "Product updated successfully",
+      data: result,
+    });
   } catch (error) {
-    resp.json({ status: false, message: 'Server error', error: error.toString() });
+    resp.json({
+      status: false,
+      message: "Server error",
+      error: error.toString(),
+    });
   }
 }
 
 module.exports = {
   doUpdateGrowerProfile,
-  doFetchGrowerProfile,
   doListNewProducts,
   doFetchProducts,
   doDeleteProduct,

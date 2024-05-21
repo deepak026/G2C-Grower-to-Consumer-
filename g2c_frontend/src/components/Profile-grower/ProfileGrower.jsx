@@ -28,18 +28,28 @@ function ProfileGrower() {
 
   useEffect(() => {
     const getGrowerInfo = async () => {
-      try {
-        const url = `http://localhost:2000/grower/growerInfo?email=${email}`;
-        const response = await axios.get(url);
-        if (response.data && response.data[0]) {
-          setGrowerProfileObj(response.data[0]);
-        } else {
-          alert("Error: " + (response.data?.msg || "No data received"));
-        }
-      } catch (error) {
-        console.error("Error fetching grower info:", error);
-        alert("Failed to fetch grower info.");
-      }
+      const url = `http://localhost:2000/grower/growerInfo?email=${email}`;
+      axios
+        .get(url)
+        .then((response) => {
+          // alert(JSON.stringify(response))
+          if (response.data.status == true) {
+            const growerData = response.data.doc;
+            setGrowerProfileObj(growerData);
+            if (growerData.g_profile_pic) {
+              setProfileImgSrc(growerData.g_profile);
+            }
+            if (growerData.g_proof_pic) {
+              setProofImgSrc(growerData.g_proof);
+            }
+          } else {
+            alert("Error: " + (response.data?.msg || "No data received"));
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching grower info:", error);
+          alert("Failed to fetch grower info.");
+        });
     };
 
     if (email) {
@@ -50,9 +60,11 @@ function ProfileGrower() {
   const updatePic = (event) => {
     const { name, files } = event.target;
     if (files && files[0]) {
-      setGrowerProfileObj({ ...growerProfileObj, [name]: files[0] });
       const newImgSrc = URL.createObjectURL(files[0]);
-      name === "g_profile_pic" ? setProfileImgSrc(newImgSrc) : setProofImgSrc(newImgSrc);
+      setGrowerProfileObj({ ...growerProfileObj, [name]: files[0] });
+      name === "g_profile_pic"
+        ? setProfileImgSrc(newImgSrc)
+        : setProofImgSrc(newImgSrc);
     }
   };
 
@@ -98,8 +110,8 @@ function ProfileGrower() {
             <input
               type="file"
               id="profile_pic"
+              
               name="g_profile_pic"
-              required
               onChange={updatePic}
               style={{ display: "none" }}
             />
@@ -110,8 +122,8 @@ function ProfileGrower() {
             <input
               type="file"
               id="proof_pic"
+              
               name="g_proof_pic"
-              required
               onChange={updatePic}
               style={{ display: "none" }}
             />
