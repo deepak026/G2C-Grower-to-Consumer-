@@ -41,7 +41,7 @@ function LoginModal({ onClose }) {
         });
         
 
-        alert(JSON.stringify(reslObj.data));
+        // alert(JSON.stringify(reslObj.data));
         localStorage.setItem("token", reslObj.data.jtoken);
         var stat = reslObj.data.status;
         var utype = reslObj.data.utype;
