@@ -36,6 +36,7 @@ function ProfileGrower() {
           if (response.data.status == true) {
             const growerData = response.data.doc;
             setGrowerProfileObj(growerData);
+            // alert(JSON.stringify(growerData));
             if (growerData.g_profile_pic) {
               setProfileImgSrc(growerData.g_profile);
             }

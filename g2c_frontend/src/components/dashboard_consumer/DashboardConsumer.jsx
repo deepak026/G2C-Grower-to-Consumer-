@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { doTokenValidation } from "../../services/users-controller";
+import { doTokenValidation } from "../../services/grower-controller";
 
 function DashboardConsumer() {
   const { email } = useParams(); // Access the id parameter from the URL

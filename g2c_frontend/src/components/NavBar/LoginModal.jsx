@@ -33,12 +33,15 @@ function LoginModal({ onClose }) {
             fd.append(prop, loginData[prop]);
         }
 
-        // var url = "http://localhost:2000/user/authLoginInfo";
-        var url = "https://g2c-grower-to-consumer.onrender.com/user/authLoginInfo";
+        var url = "http://localhost:2000/user/authLoginInfo";
+        // var url = "https://g2c-grower-to-consumer.onrender.com/user/authLoginInfo";
+
         let reslObj = await axios.post(url, fd, {
             headers:{ "Content-Type": "multipart/form-data"},
         });
-        // alert(JSON.stringify(reslObj.data.jtoken));
+        
+
+        alert(JSON.stringify(reslObj.data));
         localStorage.setItem("token", reslObj.data.jtoken);
         var stat = reslObj.data.status;
         var utype = reslObj.data.utype;

@@ -9,8 +9,8 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { doFetchListedProducts } from "../../services/users-controller";
-
+import { doFetchListedProducts } from "../../services/grower-controller";
+import "./ManageProductsStyle.css";
 function ManageProducts() {
   const { email } = useParams(); // Access the email parameter from the URL
   const [productsData, setProductsData] = useState([]); // State to store the products data fetched from server

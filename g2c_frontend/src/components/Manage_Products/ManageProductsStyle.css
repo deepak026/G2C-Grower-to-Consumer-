@@ -1,0 +1,8 @@
+/* ManageProductsStyle.css */
+td{
+   min-width: none;
+   width: 40px; /* Set the desired width */
+   height: 20px; /* Set the desired height */
+   /* Optional: align text in the center */
+  
+}
