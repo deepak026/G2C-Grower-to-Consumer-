@@ -4,7 +4,7 @@ import "./style/LoginModalStyle.css"
 import axios from "axios";
 import { Spinner } from '@chakra-ui/react'
 import { useNavigate } from "react-router-dom";
-
+import { doAuthLoginInfo } from '../../services/grower-controller';
 function LoginModal({ onClose }) {
     const navigate = useNavigate();
    const [loginData, setLoginData] = useState({
@@ -33,12 +33,13 @@ function LoginModal({ onClose }) {
             fd.append(prop, loginData[prop]);
         }
 
-        var url = "http://localhost:2000/user/authLoginInfo";
-        // var url = "https://g2c-grower-to-consumer.onrender.com/user/authLoginInfo";
+        // var url = "http://localhost:2000/user/authLoginInfo";
+        // // var url = "https://g2c-grower-to-consumer.onrender.com/user/authLoginInfo";
 
-        let reslObj = await axios.post(url, fd, {
-            headers:{ "Content-Type": "multipart/form-data"},
-        });
+        // let reslObj = await axios.post(url, fd, {
+        //     headers:{ "Content-Type": "multipart/form-data"},
+        // });
+        let reslObj = await doAuthLoginInfo(fd);
         
 
         // alert(JSON.stringify(reslObj.data));

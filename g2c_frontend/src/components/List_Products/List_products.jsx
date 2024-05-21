@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Form, Col, Container, Image, Row } from "react-bootstrap";
 import { useParams } from "react-router";
-
+import { doListNewProducts, doGetGrowerInfo } from "@/services/grower-controller";
 function List_products() {
   const [productImgSrc, setProductImgSrc] = useState(
     "https://via.placeholder.com/200"
@@ -25,8 +25,7 @@ function List_products() {
   });
 
   async function getGrowerInfo() {
-    const url = `http://localhost:2000/grower/growerInfo?email=${g_email}`;
-    const response = await axios.get(url);
+    const response = await doGetGrowerInfo(g_email);
     if (response.data.status) {
       // alert(JSON.stringify(response.data.doc));
       setg_name(response.data.doc.g_name);
@@ -104,11 +103,8 @@ function List_products() {
     for (let prop in productDetails) {
       fd.append(prop, productDetails[prop]);
     }
-    console.log(productDetails);
-    const url = "http://localhost:2000/grower/listNewProducts";
-    const response = await axios.post(url, fd, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    // console.log(productDetails);
+    const response = await doListNewProducts(fd);
     alert(JSON.stringify(response.data.msg));
 
     //reset prodyuct details and image source

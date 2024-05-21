@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./FindGrowerStyle.css";
+import { doFindAllGrowerData } from "@/services/consumer-controller";
 function FindGrower() {
   const [growerCities, setGrowerCities] = useState([]);
   const [productCategory, setProductCategory] = useState([]);
@@ -10,10 +11,10 @@ function FindGrower() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedProduct, setSelectedProduct] = useState("");
   const [serverResponse, setServerResponse] = useState({});
+
   //getting all info of the growers and updating the combo boxes
   async function findAllGrowerDetails() {
-    const url = "http://localhost:2000/consumer/findAllGrowerdata";
-    const response = await axios.post(url);
+    const response = await doFindAllGrowerData();
     setServerResponse(response);
     // alert(JSON.stringify(response.data))
     let cities = response.data.map((obj) => obj.city.toLowerCase());
