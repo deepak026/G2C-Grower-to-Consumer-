@@ -27,12 +27,14 @@ function doUpdateGrowerProfile(req, resp) {
     req.body.g_email
   );
   createNewDir(profileDirPath);
-  // console.log(req.files.g_profile_pic.name);
-  var profileName = "noPic";
-  var proofName = "noPic";
+  // console.log(req.body);
+
+
+  var profileName = req.body.g_profile_pic;
+  var proofName = req.body.g_proof_pic;
   // console.log(req.files);
 
-  if (req.files != null) {
+  if (req.files.g_profile_pic != null) {
     profileName = "profile_" + req.body.g_name + ".png";
     var profilePath = path.join(
       __dirname,
@@ -43,7 +45,8 @@ function doUpdateGrowerProfile(req, resp) {
       profileName
     );
     req.files.g_profile_pic.mv(profilePath);
-
+  }
+  if (req.files.g_proof_pic != null) {
     proofName = "proof_" + req.body.g_name + ".png";
     var proofPath = path.join(
       __dirname,
@@ -72,7 +75,7 @@ function doUpdateGrowerProfile(req, resp) {
       { new: true, upsert: true, runValidators: true }
     ) //options
     .then((doc) => {
-      resp.json({ status: true, msg: "Record Updated", doc: doc });
+      resp.json({ status: true, msg: "Profile Updated", doc: doc });
     })
     .catch((err) => {
       resp.json({ status: false, msg: err.toString() });

@@ -32,11 +32,9 @@ function ProfileGrower() {
       axios
         .get(url)
         .then((response) => {
-          // alert(JSON.stringify(response))
           if (response.data.status == true) {
             const growerData = response.data.doc;
             setGrowerProfileObj(growerData);
-            // alert(JSON.stringify(growerData));
             if (growerData.g_profile_pic) {
               setProfileImgSrc(growerData.g_profile);
             }
@@ -67,6 +65,7 @@ function ProfileGrower() {
         ? setProfileImgSrc(newImgSrc)
         : setProofImgSrc(newImgSrc);
     }
+    console.log(growerProfileObj);
   };
 
   const doUpdateVal = (event) => {
@@ -82,16 +81,28 @@ function ProfileGrower() {
     }
 
     try {
+      // alert(JSON.stringify(growerProfileObj));
       let fd = new FormData();
       for (let prop in growerProfileObj) {
-        fd.append(prop, growerProfileObj[prop]);
+        if (prop !== "g_profile" && prop !== "g_proof") {
+          fd.append(prop, growerProfileObj[prop]);
+        }
       }
+      // for (let [key, value] of fd.entries()) {
+      //   console.log(key, value);
+      // }
 
       const url = "http://localhost:2000/grower/updateGrowerProfile";
       const reslObj = await axios.post(url, fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      alert(JSON.stringify(reslObj.data));
+      // alert(JSON.stringify(reslObj.data));
+      if(reslObj.data.status){
+        alert(reslObj.data.msg);
+      }
+      else{
+        alert("Some error occured");
+      }
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("Failed to update profile.");
