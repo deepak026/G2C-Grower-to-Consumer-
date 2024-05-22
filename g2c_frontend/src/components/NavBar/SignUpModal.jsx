@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import "./style/SignupModalStyle.css";
 import axios from "axios";
-
+import { doSaveSignUpInfo } from "@/services/grower-controller";
 function SignUpModal({ onClose }) {
   const [signUpData, setSignUpData] = useState({
     // username: "",
@@ -36,10 +36,8 @@ function SignUpModal({ onClose }) {
       // fd.forEach((value, key) => {
       //   console.log(key + ': ' + value);
       // });
-      var url = `http://localhost:2000/user/saveSignUpInfo`;
-      let reslObj = await axios.post(url, fd, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      
+      let reslObj = await doSaveSignUpInfo(fd);
       if(reslObj.data.status == false){
         alert("User already exists");
       }else{

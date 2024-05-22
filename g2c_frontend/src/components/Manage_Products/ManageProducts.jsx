@@ -11,6 +11,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { doFetchListedProducts } from "../../services/grower-controller";
 import "./ManageProductsStyle.css";
+import { doUpdateProduct, doDeleteProduct} from "../../services/grower-controller";
 function ManageProducts() {
   const { email } = useParams(); // Access the email parameter from the URL
   const [productsData, setProductsData] = useState([]); // State to store the products data fetched from server
@@ -65,13 +66,14 @@ function ManageProducts() {
       productId: productId,
       productData: product,
     };
-    console.log(newData);
-    const url = `http://localhost:2000/grower/updateProduct`;
-    let reslobj = await axios.post(url, newData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    // console.log(newData);
+    // const url = `http://localhost:2000/grower/updateProduct`;
+    // let reslobj = await axios.post(url, newData, {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+    let reslobj = await doUpdateProduct(newData);
     // alert(JSON.stringify(reslobj));
     if (reslobj.data.status) {
       alert("Product updated successfully");
@@ -109,8 +111,7 @@ function ManageProducts() {
     // alert(productId)
     let confirmDel = confirm("Confirm? The product will be deleted");
     if (confirmDel) {
-      const url = `http://localhost:2000/grower/deleteProduct?email=${email}&productId=${productId}`;
-      const response = await axios.get(url);
+      const response = await doDeleteProduct(email, productId);
       if (response.data.status) {
         alert("Product deleted successfully");
         getAllProducts(); // Refresh the list after deletion

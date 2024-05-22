@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./style/ProfileGrowerStyle.css";
 import axios from "axios";
 import { useParams } from "react-router";
-
+import { doGetGrowerInfo, doUpdateGrowerProfile } from "@/services/grower-controller";
 function ProfileGrower() {
   const { email } = useParams();
 
@@ -28,27 +28,21 @@ function ProfileGrower() {
 
   useEffect(() => {
     const getGrowerInfo = async () => {
-      const url = `http://localhost:2000/grower/growerInfo?email=${email}`;
-      axios
-        .get(url)
-        .then((response) => {
-          if (response.data.status == true) {
-            const growerData = response.data.doc;
-            setGrowerProfileObj(growerData);
-            if (growerData.g_profile_pic) {
-              setProfileImgSrc(growerData.g_profile);
-            }
-            if (growerData.g_proof_pic) {
-              setProofImgSrc(growerData.g_proof);
-            }
-          } else {
-            alert("Error: " + (response.data?.msg || "No data received"));
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching grower info:", error);
-          alert("Failed to fetch grower info.");
-        });
+      const response = await doGetGrowerInfo(email);
+      // alert(JSON.stringify(response));
+
+      if (response.data.status == true) {
+        const growerData = response.data.doc;
+        setGrowerProfileObj(growerData);
+        if (growerData.g_profile_pic) {
+          setProfileImgSrc(growerData.g_profile);
+        }
+        if (growerData.g_proof_pic) {
+          setProofImgSrc(growerData.g_proof);
+        }
+      } else {
+        alert("Error: " + (response.data?.msg || "No data received"));
+      }
     };
 
     if (email) {
@@ -92,15 +86,12 @@ function ProfileGrower() {
       //   console.log(key, value);
       // }
 
-      const url = "http://localhost:2000/grower/updateGrowerProfile";
-      const reslObj = await axios.post(url, fd, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      
+      const reslObj = await doUpdateGrowerProfile(fd);
       // alert(JSON.stringify(reslObj.data));
-      if(reslObj.data.status){
+      if (reslObj.data.status) {
         alert(reslObj.data.msg);
-      }
-      else{
+      } else {
         alert("Some error occured");
       }
     } catch (error) {
@@ -122,7 +113,6 @@ function ProfileGrower() {
             <input
               type="file"
               id="profile_pic"
-              
               name="g_profile_pic"
               onChange={updatePic}
               style={{ display: "none" }}
@@ -134,7 +124,6 @@ function ProfileGrower() {
             <input
               type="file"
               id="proof_pic"
-              
               name="g_proof_pic"
               onChange={updatePic}
               style={{ display: "none" }}
