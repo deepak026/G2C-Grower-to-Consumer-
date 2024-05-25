@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./FindGrowerStyle.css";
+import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import { doFindAllGrowerData } from "@/services/consumer-controller";
+import "./FindGrowerStyle.css";
+
 function FindGrower() {
   const [growerCities, setGrowerCities] = useState([]);
   const [productCategory, setProductCategory] = useState([]);
@@ -11,114 +12,166 @@ function FindGrower() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedProduct, setSelectedProduct] = useState("");
   const [serverResponse, setServerResponse] = useState({});
+  const [filteredGrowers, setFilteredGrowers] = useState([]);
 
-  //getting all info of the growers and updating the combo boxes
+  // Getting all info of the growers and updating the combo boxes
   async function findAllGrowerDetails() {
     const response = await doFindAllGrowerData();
     setServerResponse(response);
-    // alert(JSON.stringify(response.data))
     let cities = response.data.map((obj) => obj.city.toLowerCase());
-    // let cats = response.data.flatMap(obj=>obj.products.map(product=>product.category.toLowerCase()));
-    // let prod = response.data.flatMap(obj=>obj.products.map(product=>product.product.toLowerCase()));
-    // alert(cats)
-    // alert(cities);
     var uCities = Array.from(new Set(cities));
-    // var uCats = Array.from(new Set(cats));
-    // var uProd = Array.from(new Set(prod));
-    // alert(uCities);
     setGrowerCities(uCities);
-    // setProductCategory(uCats);
-    // setProductItem(uProd);
-    // alert(JSON.stringify(response.data));
   }
 
   function handleChange(event) {
-    let { name } = event.target;
-    if (name == "city") setSelectedCity(event.target.value);
-    else if (name === "category") setSelectedCategory(event.target.value);
-    else if (name === "product") setSelectedProduct(event.target.value);
+    const { name, value } = event.target;
+    if (name === "city") {
+      setSelectedCity(value);
+      setSelectedCategory("");
+      setSelectedProduct("");
+    } else if (name === "category") {
+      setSelectedCategory(value);
+      setSelectedProduct("");
+    } else if (name === "product") {
+      setSelectedProduct(value);
+    }
   }
 
   function handleFindGrower() {
-    // alert(selectedCity + " " + selectedCategory + " " + selectedProduct);
-    alert(JSON.stringify(serverResponse));
+    // First, filter growers by the selected city
+    let filteredGrowers = serverResponse.data.filter(
+      (grower) => grower.city.toLowerCase() === selectedCity.toLowerCase()
+    );
+
+    // Then, filter growers who have the selected category of products listed
+    filteredGrowers = filteredGrowers.filter((grower) =>
+      grower.products.some(
+        (product) =>
+          product.category.toLowerCase() === selectedCategory.toLowerCase()
+      )
+    );
+
+    // Further filter growers who have the selected product
+    filteredGrowers = filteredGrowers.filter((grower) =>
+      grower.products.some(
+        (product) =>
+          product.product.toLowerCase() === selectedProduct.toLowerCase()
+      )
+    );
+
+    setFilteredGrowers(filteredGrowers);
   }
+
   useEffect(() => {
     findAllGrowerDetails();
   }, []);
 
   useEffect(() => {
-    if (serverResponse.data) {
-      let filteredGrower = serverResponse.data.filter(
+    if (serverResponse.data && selectedCity) {
+      const filteredGrowers = serverResponse.data.filter(
         (grower) => grower.city.toLowerCase() === selectedCity.toLowerCase()
       );
 
-      let categories = filteredGrower.flatMap((grower) => {
-        return grower.products.map((product) => product.category.toLowerCase());
-      });
-      let uCats = Array.from(new Set(categories));
-
-      setProductCategory(uCats);
+      const categories = filteredGrowers.flatMap((grower) =>
+        grower.products.map((product) => product.category.toLowerCase())
+      );
+      const uniqueCategories = Array.from(new Set(categories));
+      setProductCategory(uniqueCategories);
+      setProductItem([]); // Reset product items when city changes
+    } else {
+      setProductCategory([]);
     }
-  }, [selectedCity]);
+  }, [selectedCity, serverResponse]);
 
   useEffect(() => {
-    if (serverResponse.data && selectedCity) {
-      let filteredProducts = serverResponse.data
-      .filter((grower)=>grower.city.toLowerCase()===selectedCity.toLowerCase())
-      .flatMap((grower)=>grower.products)
-      .filter((product)=>product.category.toLowerCase()===selectedCategory.toLowerCase())
-      .map((product)=>product.product.toLowerCase());
+    if (serverResponse.data && selectedCity && selectedCategory) {
+      const filteredProducts = serverResponse.data
+        .filter(
+          (grower) => grower.city.toLowerCase() === selectedCity.toLowerCase()
+        )
+        .flatMap((grower) => grower.products)
+        .filter(
+          (product) =>
+            product.category.toLowerCase() === selectedCategory.toLowerCase()
+        )
+        .map((product) => product.product.toLowerCase());
 
-      let uProducts = Array.from(new Set(filteredProducts));
-      setProductItem(uProducts);
+      const uniqueProducts = Array.from(new Set(filteredProducts));
+      setProductItem(uniqueProducts);
+    } else {
+      setProductItem([]);
     }
-  }, [selectedCategory]);
-
-  //useeffect to change product category based on selected city
+  }, [selectedCategory, selectedCity, serverResponse]);
 
   return (
-    <>
+    <Container>
       <div className="grower_details">
-        <label htmlFor="">City/Village</label>
-        <select name="city" id="" onChange={handleChange}>
+        <label htmlFor="city">City/Village</label>
+        <select name="city" id="city" onChange={handleChange}>
           <option value="">selected</option>
-          {growerCities.map((item, index) => {
-            return (
-              <option key={index} value={item}>
-                {item}
-              </option>
-            );
-          })}
+          {growerCities.map((item, index) => (
+            <option key={index} value={item}>
+              {item}
+            </option>
+          ))}
         </select>
-        <label htmlFor="">Product Category</label>
-        <select name="category" id="" onChange={handleChange}>
+        <label htmlFor="category">Product Category</label>
+        <select name="category" id="category" value={selectedCategory} onChange={handleChange}>
           <option value="">selected</option>
-          {productCategory.map((item, index) => {
-            return (
-              <option key={index} value={item}>
-                {item}
-              </option>
-            );
-          })}
+          {productCategory.map((item, index) => (
+            <option key={index} value={item}>
+              {item}
+            </option>
+          ))}
         </select>
-        <label htmlFor="">Items</label>
-        <select name="product" id="" onChange={handleChange}>
+        <label htmlFor="product">Items</label>
+        <select name="product" id="product" value={selectedProduct} onChange={handleChange}>
           <option value="">selected</option>
-          {productItem.map((item, index) => {
-            return (
-              <option key={index} value={item}>
-                {item}
-              </option>
-            );
-          })}
+          {productItem.map((item, index) => (
+            <option key={index} value={item}>
+              {item}
+            </option>
+          ))}
         </select>
         <br />
         <br />
         <br />
-        <input type="button" value="Find Grower" onClick={handleFindGrower} />
+        <Button onClick={handleFindGrower}>Find Grower</Button>
       </div>
-    </>
+      <br />
+      <br />
+      <Row>
+        {filteredGrowers.map((grower, index) => {
+          const product = grower.products.find(
+            (product) =>
+              product.product.toLowerCase() === selectedProduct.toLowerCase()
+          );
+          return (
+            <Col key={index} sm={12} md={6} lg={4} className="mb-4">
+              <Card>
+                <Card.Body>
+                  <Card.Title>{grower.g_name}</Card.Title>
+                  <Card.Text>
+                    <strong>Email:</strong> {grower.email}
+                    <br />
+                    <strong>City:</strong> {grower.city}
+                    <br />
+                    <strong>Category:</strong> {product?.category}
+                    <br />
+                    <strong>Product:</strong> {product?.product}
+                    <br />
+                    <strong>Price:</strong> {product?.price}
+                    <br />
+                    <strong>Description:</strong> {product?.description}
+                  </Card.Text>
+                  <Button>Contact Grower</Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          );
+        })}
+      </Row>
+    </Container>
   );
 }
 
