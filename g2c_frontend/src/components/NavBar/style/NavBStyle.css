@@ -1,9 +1,34 @@
-.navbar .btn{
-   margin: 5px;
-   color: #fff;
-   background-color: #007bff;
+.nav{
+   padding: 20px 40px 10px 60px;
+   justify-content: left;
+   background-color: #f8f9fa;
 }
-.navbar .btn:hover{
+.nav-content{
+   margin-left: 580px;
+}
+.nav-content-other{
+   font-size: 18px;
+   display: inline;
+   margin-right: 10px;
+}
+.nav-content-other-text{
+   margin-left: 10px;
+}
+.nav-content-title{
+   font-size: 25px;
+   margin-right: 200px;
+}
+
+p{
+   display: inline;
+}
+
+.btn{
    color: #fff;
-   background-color: #0056b3;
+   background-color: #45A049;
+   margin-left: 10px;
+}
+.btn:hover{
+   color: #fff;
+   background-color: #228B22 ;
 }

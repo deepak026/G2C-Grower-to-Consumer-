@@ -15,8 +15,19 @@ function NavB() {
   const [showSignUp, setShowSignUp] = useState(false);
   return (
     <div>
-      <div>
-        <Navbar className="bg-body-tertiary">
+      <div className='nav'>
+        <p className="nav-content-title">G2C(Grower 2 Cosumer)</p>
+        <div className="nav-content">
+          <div className="nav-content-other">
+            <p className='nav-content-other-text'><Link to="/contactUs">Contact Us</Link></p>
+            <p className="nav-content-other-text"><Link to="/aboutMe">About Me</Link></p>
+          </div>
+          <p className="nav-content-button">
+          <button className="btn" onClick={()=>setShowSignUp(true)}>Sign-up</button>
+          <button className="btn" onClick={()=>setShowLogin(true)}>Login</button>
+          </p>
+        </div>
+        {/* <Navbar className="bg-body-tertiary">
           <Container>
             <Navbar.Brand href="/">G2C(Grower 2 Cosumer)</Navbar.Brand>
             <Navbar.Toggle />
@@ -27,7 +38,7 @@ function NavB() {
               <button className="btn" onClick={()=>setShowLogin(true)}>Login</button>
             </Navbar.Collapse>
           </Container>
-        </Navbar>
+        </Navbar> */}
         {showSignUp && <SignUpModal onClose={()=>setShowSignUp(false)}/>}
         {showLogin && <LoginModal onClose={()=>setShowLogin(false)}/>}
       </div>
