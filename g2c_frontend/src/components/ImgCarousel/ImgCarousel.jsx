@@ -25,13 +25,13 @@ function ImgCarousel() {
         </Col>
         <Col className="mb-4 order-md-2">
           <Carousel
-            className="imgCoro"
+            className=""
             activeIndex={index}
             onSelect={handleSelect}
           >
             <Carousel.Item>
               <img
-                className="d-block w-100"
+                className="d-block w-100 imgCoro"
                 src="/images/Home_page_carousel/img1.jpg"
                 alt="First slide"
               />
@@ -44,7 +44,7 @@ function ImgCarousel() {
             </Carousel.Item>
             <Carousel.Item className="c">
               <img
-                className="d-block w-100"
+                className="d-block w-100 imgCoro"
                 src="/images/Home_page_carousel/img2.jpg"
                 alt="Second slide"
               />
@@ -55,7 +55,7 @@ function ImgCarousel() {
             </Carousel.Item>
             <Carousel.Item className="c">
               <img
-                className="d-block w-100"
+                className="d-block w-100 imgCoro"
                 src="/images/Home_page_carousel/img3.jpg"
                 alt="Third slide"
               />

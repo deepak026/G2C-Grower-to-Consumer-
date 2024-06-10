@@ -7,56 +7,68 @@ function DiscoverPlatform() {
       <h1 className="services_title">Discover Our Platform</h1>
 
       <div>
-         {/* Card 1 */}
+        {/* Card 1 */}
         <div className="row service_cards">
           <div className="col-md-6">
-            <Card >
-               <Card.Img className="service_card_img" variant="top" src="https://assets.lummi.ai/assets/QmSLLyVY4S5ZnyURDdu2RhfzCWCNUzBGXYcpNpJh51xhzq?auto=format&w=1500.jpg" />
-            </Card>
+            <img
+              className="service_card_img"
+              variant="top"
+              src="https://assets.lummi.ai/assets/QmSLLyVY4S5ZnyURDdu2RhfzCWCNUzBGXYcpNpJh51xhzq?auto=format&w=1500.jpg"
+            />
           </div>
-          <div className="col-md-6 service_info">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat
-              vel sequi tempora dolorem quia quam blanditiis, ut perspiciatis
-              eveniet placeat amet, quaerat quibusdam culpa inventore dolores
-              numquam cum animi delectus.
-            </p>
+          <div className="col-md-6 ">
+            <div className="service_info">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat
+                vel sequi tempora dolorem quia quam blanditiis, ut perspiciatis
+                eveniet placeat amet, quaerat quibusdam culpa inventore dolores
+                numquam cum animi delectus.
+              </p>
+            </div>
           </div>
         </div>
         {/* Card 2 */}
         <div className="row service_cards">
-          <div className="col-md-6 service_info">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat
-              vel sequi tempora dolorem quia quam blanditiis, ut perspiciatis
-              eveniet placeat amet, quaerat quibusdam culpa inventore dolores
-              numquam cum animi delectus.
-            </p>
+        <div className="col-md-6 ">
+            <div className="service_info">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat
+                vel sequi tempora dolorem quia quam blanditiis, ut perspiciatis
+                eveniet placeat amet, quaerat quibusdam culpa inventore dolores
+                numquam cum animi delectus.
+              </p>
+            </div>
           </div>
           <div className="col-md-6">
-            <Card className="service_card">
-               <Card.Img variant="top" src="https://assets.lummi.ai/assets/QmSLLyVY4S5ZnyURDdu2RhfzCWCNUzBGXYcpNpJh51xhzq?auto=format&w=1500.jpg" />
-            </Card>
+            <img
+              className="service_card_img"
+              variant="top"
+              src="https://assets.lummi.ai/assets/QmSLLyVY4S5ZnyURDdu2RhfzCWCNUzBGXYcpNpJh51xhzq?auto=format&w=1500.jpg"
+            />
           </div>
         </div>
         {/* Card 3 */}
         <div className="row service_cards">
           <div className="col-md-6">
-            <Card className="service_card">
-               <Card.Img variant="top" src="https://assets.lummi.ai/assets/QmSLLyVY4S5ZnyURDdu2RhfzCWCNUzBGXYcpNpJh51xhzq?auto=format&w=1500.jpg" />
-            </Card>
+            <img
+              className="service_card_img"
+              variant="top"
+              src="https://assets.lummi.ai/assets/QmSLLyVY4S5ZnyURDdu2RhfzCWCNUzBGXYcpNpJh51xhzq?auto=format&w=1500.jpg"
+            />
           </div>
-          <div className="col-md-6 service_info">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat
-              vel sequi tempora dolorem quia quam blanditiis, ut perspiciatis
-              eveniet placeat amet, quaerat quibusdam culpa inventore dolores
-              numquam cum animi delectus.
-            </p>
+          <div className="col-md-6 ">
+            <div className="service_info">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat
+                vel sequi tempora dolorem quia quam blanditiis, ut perspiciatis
+                eveniet placeat amet, quaerat quibusdam culpa inventore dolores
+                numquam cum animi delectus.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-          </div>
+    </div>
   );
 }
 
