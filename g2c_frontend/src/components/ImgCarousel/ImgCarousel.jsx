@@ -10,7 +10,7 @@ function ImgCarousel() {
   };
 
   return (
-    <>
+    <div className="coroDiv">
       <Row>
         <Col lg={6} md={12} className="imgCoroText mb-4 order-md-1">
           <h2 className="imgCoroTitle">Welcome,</h2>
@@ -71,7 +71,7 @@ function ImgCarousel() {
         </Col>
       </Row>
       <hr className="hrImgCoro"/>
-    </>
+    </div>
   );
 }
 

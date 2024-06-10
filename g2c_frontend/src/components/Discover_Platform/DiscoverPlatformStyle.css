@@ -1,0 +1,17 @@
+.services_container{
+  margin-left: 120px;
+  margin-right: 80px;
+}
+.services_title{
+  text-align: center;
+  margin-bottom: 50px;
+}
+.service_cards{
+  margin-bottom: 80px;
+}
+
+.service_cards{
+  Card.Img{
+    height:500px;
+  }
+}

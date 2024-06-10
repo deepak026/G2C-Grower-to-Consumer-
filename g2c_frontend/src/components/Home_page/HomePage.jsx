@@ -1,17 +1,17 @@
 import React from 'react'
 import NavB from '../NavBar/NavB'
 import ManageProducts from '../Manage_Products/ManageProducts'
-import OurServices from '../Our_services/OurServices'
 import ImgCarousel from '../ImgCarousel/ImgCarousel'
 import Contributer from '../Contributer/Contributer'
 import ContactUs from '../ContactUs/ContactUs'
+import DiscoverPlatform from '../Discover_Platform/DiscoverPlatform'
 
 function HomePage() {
   return (
     <>
       <NavB />
       <ImgCarousel/>
-      <OurServices/>
+      <DiscoverPlatform />
       <Contributer/>
       <ContactUs />
       {/* <ManageProducts /> */}
